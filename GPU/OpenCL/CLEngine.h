@@ -38,6 +38,11 @@
 #define BECH32 2
 #define POCX 3
 
+// Constants
+#define _64K 65536
+#define ITEM_SIZE32 7
+#define ITEM_SIZE (ITEM_SIZE32 * 4)
+
 typedef uint16_t prefix_t;
 typedef uint32_t prefixl_t;
 
