@@ -14,3 +14,11 @@ CMakeLists.txt
 VanitySearch/
 cmake-build-debug/
 *.prf
+# OpenCL build artifacts
+*.o
+VanitySearch
+VanitySearchCL
+tests/test_*
+tests/benchmark_*
+!tests/*.cpp
+!tests/*.h
