@@ -392,7 +392,7 @@ bool VanitySearch::initPrefix(std::string &prefix,PREFIX_ITEM *it) {
   }
 
   if (aType==-1) {
-    printf("Ignoring prefix \"%s\" (must start with 1, 3, p, bc1q, or pocx1q)\n", prefix.c_str());
+    printf("Ignoring prefix \"%s\" (must start with 1, 3, p, bc1q, or pocx1)\n", prefix.c_str());
     return false;
   }
 
