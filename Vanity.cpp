@@ -793,7 +793,27 @@ void VanitySearch::output(string addr,string pAddr,string pAddrHex) {
   if(!needToClose)
     printf("\n");
 
-  fprintf(f, "PubAddress: %s\n", addr.c_str());
+  if (searchType == POCX && !startPubKeySpecified) {
+    // For POCX, generate and display both mainnet and testnet addresses
+    // Decode the private key to get hash160
+    Int privKey;
+    privKey.SetBase16((char *)pAddrHex.c_str());
+    bool compressed = (searchMode == SEARCH_COMPRESSED);
+    
+    // Compute public key and hash160
+    Point pubKey = secp->ComputePublicKey(&privKey);
+    unsigned char hash160[20];
+    secp->GetHash160(searchType, compressed, pubKey, hash160);
+    
+    // Generate testnet address
+    string testnetAddr = secp->GetAddressTestnet(searchType, compressed, hash160);
+    
+    fprintf(f, "Pub (Mainnet): %s\n", addr.c_str());
+    fprintf(f, "Pub (Testnet): %s\n", testnetAddr.c_str());
+  } else {
+    fprintf(f, "PubAddress: %s\n", addr.c_str());
+  }
+  
   fprintf(f, "Priv (HEX): 0x%s\n", pAddrHex.c_str());
 
   if (startPubKeySpecified) {
@@ -1691,7 +1711,7 @@ void VanitySearch::FindKeyGPU(TH_PARAM *ph) {
 
   }
 
-  // NEU: Explizite Synchronisation über Wrapper-Funktion
+  // NEU: Explizite Synchronisation ï¿½ber Wrapper-Funktion
   g.WaitForCompletion();
 
   delete[] keys;

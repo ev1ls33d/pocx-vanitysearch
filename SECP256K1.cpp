@@ -859,6 +859,45 @@ bool Secp256K1::CheckPudAddress(std::string address) {
 
 }
 
+std::string Secp256K1::GetAddressTestnet(int type, bool compressed, unsigned char *hash160) {
+
+  unsigned char address[25];
+  switch(type) {
+
+    case P2PKH:
+      address[0] = 0x6f; // Testnet P2PKH
+      break;
+
+    case P2SH:
+      address[0] = 0xc4; // Testnet P2SH
+      break;
+
+    case POCX:
+      {
+        // POCX testnet uses Bech32 format with "tpocx" HRP
+        char output[128];
+        segwit_addr_encode(output, "tpocx", 0, hash160, 20);
+        return std::string(output);
+      }
+      break;
+
+    case BECH32:
+    {
+      // Bitcoin testnet uses "tb" HRP
+      char output[128];
+      segwit_addr_encode(output, "tb", 0, hash160, 20);
+      return std::string(output);
+    }
+    break;
+  }
+  memcpy(address + 1, hash160,20);
+  sha256_checksum(address,21,address+21);
+
+  // Base58
+  return EncodeBase58(address, address + 25);
+
+}
+
 Point Secp256K1::AddDirect(Point &p1,Point &p2) {
 
   Int _s;

@@ -16,6 +16,7 @@
 */
 
 #include <string.h>
+#include <cstdint>
 #include "sha256.h"
 
 #define BSWAP
