@@ -369,24 +369,23 @@ bool VanitySearch::initPrefix(std::string &prefix,PREFIX_ITEM *it) {
   case 'p':
   case 'P':
     {
-      // Check if it's a Bech32 POCX address (pocx1q...) or Base58 POCX (p...)
+      // Check if it's a Bech32 POCX address (pocx1...) or Base58 POCX (p...)
       std::string lowerPrefix = prefix;
       std::transform(lowerPrefix.begin(), lowerPrefix.end(), lowerPrefix.begin(), ::tolower);
-      if(strncmp(lowerPrefix.c_str(), "pocx1q", 6) == 0) {
+      if(strncmp(lowerPrefix.c_str(), "pocx1", 5) == 0) {
         aType = POCX;  // POCX Bech32 format - use POCX type
       } else {
         aType = POCX;  // PoCX mainnet Base58 addresses start with 'p' (version 0x55)
       }
       break;
     }
-    break;
   case 'b':
   case 'B':
     {
       std::transform(prefix.begin(), prefix.end(), prefix.begin(), ::tolower);
       if(strncmp(prefix.c_str(), "bc1q", 4) == 0)
         aType = BECH32;
-      else if(strncmp(prefix.c_str(), "pocx1q", 6) == 0)
+      else if(strncmp(prefix.c_str(), "pocx1", 5) == 0)
         aType = POCX; // PoCX Bech32 format - use POCX type
       break;
     }
@@ -416,9 +415,9 @@ bool VanitySearch::initPrefix(std::string &prefix,PREFIX_ITEM *it) {
     std::string lowerPrefix = prefix;
     std::transform(lowerPrefix.begin(), lowerPrefix.end(), lowerPrefix.begin(), ::tolower);
     
-    if (strncmp(lowerPrefix.c_str(), "pocx1q", 6) == 0) {
+    if (strncmp(lowerPrefix.c_str(), "pocx1", 5) == 0) {
       hrp = "pocx";
-      hrp_offset = 6; // Skip "pocx1q"
+      hrp_offset = 5; // Skip "pocx1"
     } else {
       hrp = "bc";
       hrp_offset = 4; // Skip "bc1q"
@@ -471,17 +470,17 @@ bool VanitySearch::initPrefix(std::string &prefix,PREFIX_ITEM *it) {
 
   } else if (aType == POCX) {
   
-    // POCX - could be Base58 (p...) or Bech32 (pocx1q...)
+    // POCX - could be Base58 (p...) or Bech32 (pocx1...)
     std::string lowerPrefix = prefix;
     std::transform(lowerPrefix.begin(), lowerPrefix.end(), lowerPrefix.begin(), ::tolower);
     
-    if (strncmp(lowerPrefix.c_str(), "pocx1q", 6) == 0) {
+    if (strncmp(lowerPrefix.c_str(), "pocx1", 5) == 0) {
       // POCX Bech32 format
       uint8_t witprog[40];
       size_t witprog_len;
       int witver;
       const char* hrp = "pocx";
-      int hrp_offset = 6;
+      int hrp_offset = 5;
 
       int ret = segwit_addr_decode(&witver, witprog, &witprog_len, hrp, prefix.c_str());
 
@@ -626,6 +625,9 @@ bool VanitySearch::initPrefix(std::string &prefix,PREFIX_ITEM *it) {
     return true;
 
   }
+  
+  // Should not reach here
+  return false;
 }
 
 // ----------------------------------------------------------------------------
