@@ -6,7 +6,6 @@
 
 #include "DescriptorChecksum.h"
 #include <string>
-#include <cstdint>
 
 // Character set for descriptor checksums
 static const char* CHECKSUM_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
